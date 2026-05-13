@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taleb AI - Student Community</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen relative flex flex-col justify-between">
+  <div class="bg-orb-1"></div>
+  <div class="bg-orb-2"></div>
+
+  <!-- Dynamic Navbar -->
+  <div id="navbar-container"></div>
+
+  <!-- Community Container -->
+  <main class="flex-grow max-w-5xl mx-auto px-6 py-10 w-full">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-6 mb-10">
+      <div>
+        <div class="inline-flex items-center space-x-2 rtl:space-x-reverse glass px-4 py-2 rounded-full text-amber-400 mb-3 text-xs font-semibold">
+          <i class="fa-solid fa-users"></i>
+          <span>Nationwide Study Hub</span>
+        </div>
+        <h1 class="text-4xl font-extrabold mb-1" data-i18n="nav_community">Student Community</h1>
+        <p class="text-slate-400 text-sm">Ask questions, share revision notes, and discuss exam strategies.</p>
+      </div>
+
+      <button onclick="openModal('postModal')" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold px-6 py-3 rounded-2xl shadow-xl hover:shadow-emerald-500/30 transition flex items-center space-x-2 rtl:space-x-reverse">
+        <i class="fa-solid fa-pen-to-square"></i>
+        <span>Create Discussion Post</span>
+      </button>
+    </div>
+
+    <!-- Posts Feed -->
+    <div id="communityFeed" class="space-y-8">
+      <!-- Dynamic rendering -->
+    </div>
+  </main>
+
+  <!-- Create Post Modal -->
+  <div id="postModal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-6">
+    <div class="glass-card w-full max-w-lg p-8 rounded-3xl border border-white/10 shadow-2xl relative">
+      <button onclick="closeModal('postModal')" class="absolute top-6 right-6 text-slate-400 hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
+      <h3 class="text-2xl font-bold mb-6">Create Discussion Post</h3>
+      <form onsubmit="addPost(event)" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-slate-300 mb-2">What is on your mind?</label>
+          <textarea id="newPostContent" rows="4" required class="w-full bg-slate-900 border border-white/10 rounded-2xl p-4 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500" placeholder="Ask a question or share a study tip..."></textarea>
+        </div>
+        <button type="submit" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition">
+          Publish Post
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="glass border-t border-white/10 py-6 px-6 text-center text-xs text-slate-500 mt-12">
+    <p>© 2026 Taleb AI. Empowering Algerian Education.</p>
+  </footer>
+
+  <script src="../js/app.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      renderPosts();
+    });
+
+    function openModal(id) { document.getElementById(id).classList.remove("hidden"); }
+    function closeModal(id) { document.getElementById(id).classList.add("hidden"); }
+
+    function renderPosts() {
+      const posts = JSON.parse(localStorage.getItem("taleb_posts")) || [];
+      const feed = document.getElementById("communityFeed");
+      
+      feed.innerHTML = posts.map(p => `
+        <div class="glass-card p-8 rounded-3xl border border-white/10 shadow-xl">
+          <!-- Post Author Header -->
+          <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center space-x-4 rtl:space-x-reverse">
+              <img src="${p.authorAvatar}" alt="Avatar" class="w-12 h-12 rounded-2xl bg-slate-800 border border-white/10 shadow">
+              <div>
+                <h4 class="font-bold text-slate-100 text-base">${p.authorName}</h4>
+                <p class="text-xs text-slate-400 font-mono">${p.date}</p>
+              </div>
+            </div>
+            <div class="text-xs bg-slate-900 px-3 py-1 rounded-full text-slate-400 border border-white/5">
+              Study Discussion
+            </div>
+          </div>
+
+          <!-- Post Content -->
+          <p class="text-slate-200 text-base leading-relaxed mb-6 font-sans">${p.content}</p>
+
+          <!-- Post Actions Bar -->
+          <div class="flex items-center space-x-6 rtl:space-x-reverse pb-6 border-b border-white/10 mb-6 text-sm">
+            <button onclick="toggleLike(${p.id})" class="flex items-center space-x-2 rtl:space-x-reverse font-bold transition ${p.likedByMe ? 'text-emerald-400' : 'text-slate-400 hover:text-white'}">
+              <i class="${p.likedByMe ? 'fa-solid' : 'fa-regular'} fa-thumbs-up text-lg"></i>
+              <span>${p.likes} Likes</span>
+            </button>
+            <div class="flex items-center space-x-2 rtl:space-x-reverse text-slate-400">
+              <i class="fa-regular fa-comment text-lg"></i>
+              <span>${p.comments ? p.comments.length : 0} Comments</span>
+            </div>
+          </div>
+
+          <!-- Comments Section -->
+          <div class="space-y-4 mb-6">
+            ${(p.comments || []).map(c => `
+              <div class="bg-slate-900/60 border border-white/5 p-4 rounded-2xl text-sm">
+                <div class="flex items-center justify-between mb-1">
+                  <span class="font-bold text-emerald-400 text-xs">${c.author}</span>
+                </div>
+                <p class="text-slate-300 leading-snug">${c.text}</p>
+              </div>
+            `).join("")}
+          </div>
+
+          <!-- Add Comment Input -->
+          <form onsubmit="addComment(event, ${p.id})" class="flex gap-3">
+            <input type="text" id="commentInput-${p.id}" required class="flex-grow bg-slate-900/90 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500" placeholder="Write an encouraging reply...">
+            <button type="submit" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-5 py-2.5 rounded-xl text-sm transition">Reply</button>
+          </form>
+        </div>
+      `).join("");
+    }
+
+    function addPost(e) {
+      e.preventDefault();
+      const content = document.getElementById("newPostContent").value.trim();
+      if (!content) return;
+
+      let user = getCurrentUser();
+      if (!user) {
+        const users = JSON.parse(localStorage.getItem("taleb_users"));
+        user = users[1]; // student
+      }
+
+      const posts = JSON.parse(localStorage.getItem("taleb_posts")) || [];
+      const newPost = {
+        id: Date.now(),
+        authorName: user.name,
+        authorAvatar: user.avatar,
+        date: "Just now",
+        content,
+        likes: 0,
+        likedByMe: false,
+        comments: []
+      };
+
+      posts.unshift(newPost);
+      localStorage.setItem("taleb_posts", JSON.stringify(posts));
+      closeModal('postModal');
+      document.getElementById("newPostContent").value = "";
+      renderPosts();
+    }
+
+    function toggleLike(id) {
+      const posts = JSON.parse(localStorage.getItem("taleb_posts")) || [];
+      const post = posts.find(p => p.id === id);
+      if (post) {
+        if (post.likedByMe) {
+          post.likes--;
+          post.likedByMe = false;
+        } else {
+          post.likes++;
+          post.likedByMe = true;
+        }
+        localStorage.setItem("taleb_posts", JSON.stringify(posts));
+        renderPosts();
+      }
+    }
+
+    function addComment(e, postId) {
+      e.preventDefault();
+      const input = document.getElementById(`commentInput-${postId}`);
+      const text = input.value.trim();
+      if (!text) return;
+
+      let user = getCurrentUser();
+      if (!user) {
+        const users = JSON.parse(localStorage.getItem("taleb_users"));
+        user = users[1]; // student
+      }
+
+      const posts = JSON.parse(localStorage.getItem("taleb_posts")) || [];
+      const post = posts.find(p => p.id === postId);
+      if (post) {
+        if (!post.comments) post.comments = [];
+        post.comments.push({
+          author: user.name,
+          text
+        });
+        localStorage.setItem("taleb_posts", JSON.stringify(posts));
+        renderPosts();
+      }
+    }
+  </script>
+</body>
+</html>

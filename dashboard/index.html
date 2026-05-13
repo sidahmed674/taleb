@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taleb AI - Student Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen relative flex flex-col justify-between">
+  <div class="bg-orb-1"></div>
+  <div class="bg-orb-2"></div>
+
+  <!-- Dynamic Navbar -->
+  <div id="navbar-container"></div>
+
+  <!-- Dashboard Main Content -->
+  <main class="flex-grow max-w-7xl mx-auto px-6 py-10 w-full">
+    <!-- Welcome Header -->
+    <div class="glass-card p-8 rounded-3xl mb-8 border border-white/10 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
+      <div class="flex items-center space-x-6 rtl:space-x-reverse">
+        <img id="dashAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Student" alt="User Avatar" class="w-20 h-20 rounded-2xl bg-emerald-500/20 border-2 border-emerald-500/40 shadow-lg">
+        <div>
+          <h1 class="text-3xl font-extrabold mb-1">Welcome back, <span id="dashName" class="text-emerald-400">Student</span>!</h1>
+          <p id="dashLevel" class="text-slate-400 text-sm font-medium">Baccalaureate Aspirant</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-4 rtl:space-x-reverse">
+        <div class="bg-slate-900/80 border border-white/10 px-6 py-3 rounded-2xl text-center shadow-inner">
+          <div class="text-xs text-slate-500 uppercase tracking-widest font-bold mb-1">Study Streak</div>
+          <div class="text-2xl font-black text-amber-400 flex items-center justify-center space-x-1.5 rtl:space-x-reverse">
+            <i class="fa-solid fa-fire text-lg animate-bounce"></i>
+            <span id="dashStreak">12 Days</span>
+          </div>
+        </div>
+        <div class="bg-slate-900/80 border border-white/10 px-6 py-3 rounded-2xl text-center shadow-inner">
+          <div class="text-xs text-slate-500 uppercase tracking-widest font-bold mb-1">Total XP</div>
+          <div class="text-2xl font-black text-emerald-400 flex items-center justify-center space-x-1.5 rtl:space-x-reverse">
+            <i class="fa-solid fa-bolt"></i>
+            <span id="dashPoints">890 XP</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Exam Countdown Banner -->
+    <div class="bg-gradient-to-r from-emerald-600 to-teal-700 rounded-3xl p-8 mb-8 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden">
+      <div class="absolute right-0 top-0 translate-x-12 -translate-y-12 w-64 h-64 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+      <div>
+        <div class="inline-block bg-white/20 backdrop-blur-md text-xs uppercase font-extrabold px-3 py-1 rounded-full mb-3 tracking-wider">
+          Algerian Official Exam
+        </div>
+        <h2 class="text-3xl font-extrabold mb-2">Baccalaureate Exam June 2026</h2>
+        <p class="text-emerald-100 max-w-xl text-sm leading-relaxed">
+          Consistent daily practice with Taleb AI boosts retention. You are on track to achieve excellence!
+        </p>
+      </div>
+      <div class="flex space-x-4 rtl:space-x-reverse bg-slate-950/40 p-4 rounded-2xl backdrop-blur-md border border-white/10">
+        <div class="text-center px-3">
+          <div id="cdDays" class="text-3xl font-black">142</div>
+          <div class="text-xs uppercase font-bold text-emerald-200 tracking-wider">Days</div>
+        </div>
+        <div class="text-3xl font-light text-emerald-300">:</div>
+        <div class="text-center px-3">
+          <div id="cdHours" class="text-3xl font-black">08</div>
+          <div class="text-xs uppercase font-bold text-emerald-200 tracking-wider">Hours</div>
+        </div>
+        <div class="text-3xl font-light text-emerald-300">:</div>
+        <div class="text-center px-3">
+          <div id="cdMins" class="text-3xl font-black">45</div>
+          <div class="text-xs uppercase font-bold text-emerald-200 tracking-wider">Mins</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Left Column: Quick AI Tutor Launcher & Subjects -->
+      <div class="lg:col-span-2 space-y-8">
+        <!-- AI Prompt Quick Launcher -->
+        <div class="glass-card p-8 rounded-3xl border border-emerald-500/30 shadow-xl relative overflow-hidden">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none"></div>
+          <h3 class="text-xl font-bold mb-2 flex items-center space-x-2 rtl:space-x-reverse text-emerald-400">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+            <span>Ask Taleb AI Instantly</span>
+          </h3>
+          <p class="text-slate-400 text-sm mb-6">Type any subject question or paste a tricky BAC equation.</p>
+          <div class="flex gap-3">
+            <input type="text" id="quickPromptInput" class="w-full bg-slate-900/90 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500" placeholder="Ask about exponential limits, ATP synthesis, or philosophy methodology...">
+            <button onclick="launchAIChat()" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold px-6 py-3 rounded-xl shadow-lg transition flex items-center space-x-2 rtl:space-x-reverse">
+              <span>Ask</span>
+              <i class="fa-solid fa-paper-plane text-sm"></i>
+            </button>
+          </div>
+          <div class="flex flex-wrap gap-2 mt-4 text-xs">
+            <span class="text-slate-500 self-center">Suggested:</span>
+            <button onclick="fillQuickPrompt('Explain BAC Math exponential limit theorem')" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1 rounded-lg transition">Math Exp Limits</button>
+            <button onclick="fillQuickPrompt('Summarize ATP generation in cellular respiration')" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1 rounded-lg transition">ATP Generation</button>
+            <button onclick="fillQuickPrompt('How to write a philosophy BAC dialectic essay')" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1 rounded-lg transition">Philosophy Essay</button>
+          </div>
+        </div>
+
+        <!-- Enrolled Subjects & Progress -->
+        <div class="glass-card p-8 rounded-3xl border border-white/10 shadow-xl">
+          <div class="flex items-center justify-between mb-6">
+            <h3 class="text-xl font-bold">Your Curriculum Progress</h3>
+            <a href="../pages/exercises.html" class="text-xs text-emerald-400 hover:underline font-semibold">View All Exercises</a>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div class="bg-slate-900/60 border border-white/5 p-5 rounded-2xl flex items-center space-x-4 rtl:space-x-reverse">
+              <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl font-bold">∑</div>
+              <div class="flex-grow">
+                <div class="flex justify-between text-sm font-bold mb-1">
+                  <span>Mathématiques</span>
+                  <span class="text-emerald-400">78%</span>
+                </div>
+                <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                  <div class="bg-emerald-500 h-full rounded-full" style="width: 78%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-slate-900/60 border border-white/5 p-5 rounded-2xl flex items-center space-x-4 rtl:space-x-reverse">
+              <div class="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-xl font-bold"><i class="fa-solid fa-atom"></i></div>
+              <div class="flex-grow">
+                <div class="flex justify-between text-sm font-bold mb-1">
+                  <span>Physique-Chimie</span>
+                  <span class="text-blue-400">64%</span>
+                </div>
+                <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                  <div class="bg-blue-500 h-full rounded-full" style="width: 64%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-slate-900/60 border border-white/5 p-5 rounded-2xl flex items-center space-x-4 rtl:space-x-reverse">
+              <div class="w-12 h-12 rounded-xl bg-teal-500/10 text-teal-400 flex items-center justify-center text-xl font-bold"><i class="fa-solid fa-dna"></i></div>
+              <div class="flex-grow">
+                <div class="flex justify-between text-sm font-bold mb-1">
+                  <span>Sciences SNV</span>
+                  <span class="text-teal-400">85%</span>
+                </div>
+                <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                  <div class="bg-teal-500 h-full rounded-full" style="width: 85%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-slate-900/60 border border-white/5 p-5 rounded-2xl flex items-center space-x-4 rtl:space-x-reverse">
+              <div class="w-12 h-12 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-xl font-bold"><i class="fa-solid fa-feather-pointed"></i></div>
+              <div class="flex-grow">
+                <div class="flex justify-between text-sm font-bold mb-1">
+                  <span>Philosophie</span>
+                  <span class="text-purple-400">42%</span>
+                </div>
+                <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                  <div class="bg-purple-500 h-full rounded-full" style="width: 42%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Notifications & Community Feed Preview -->
+      <div class="space-y-8">
+        <!-- Notifications Card -->
+        <div class="glass-card p-6 rounded-3xl border border-white/10 shadow-xl">
+          <h3 class="text-xl font-bold mb-4 flex items-center space-x-2 rtl:space-x-reverse">
+            <i class="fa-solid fa-bell text-amber-400"></i>
+            <span>Recent Notifications</span>
+          </h3>
+          <div id="notificationsList" class="space-y-4">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- Quick Community Preview -->
+        <div class="glass-card p-6 rounded-3xl border border-white/10 shadow-xl">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-xl font-bold">Community Buzz</h3>
+            <a href="../pages/community.html" class="text-xs text-emerald-400 hover:underline font-semibold">Join Hub</a>
+          </div>
+          <div class="bg-slate-900/60 border border-white/5 p-4 rounded-2xl text-sm space-y-2">
+            <div class="flex items-center space-x-2 rtl:space-x-reverse text-xs text-slate-400">
+              <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Amine" alt="User" class="w-5 h-5 rounded-full">
+              <span class="font-bold text-slate-300">Amine Dz</span>
+              <span>• 2 hours ago</span>
+            </div>
+            <p class="text-slate-300 line-clamp-2">Salam everyone! Who is ready for the upcoming Baccalaureate mock exams? Any tips for remembering organic chemistry?</p>
+            <div class="text-xs text-emerald-400 flex items-center space-x-1 rtl:space-x-reverse">
+              <i class="fa-solid fa-thumbs-up"></i>
+              <span>24 likes</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="glass border-t border-white/10 py-6 px-6 text-center text-xs text-slate-500 mt-12">
+    <p>© 2026 Taleb AI. Empowering Algerian Education.</p>
+  </footer>
+
+  <script src="../js/app.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      let user = getCurrentUser();
+      if (!user) {
+        // Create demo student session if not logged in
+        const users = JSON.parse(localStorage.getItem("taleb_users"));
+        user = users[1]; // student@taleb.ai
+        localStorage.setItem("taleb_currentUser", JSON.stringify(user));
+      }
+
+      document.getElementById("dashName").innerText = user.name;
+      document.getElementById("dashStreak").innerText = `${user.streak} Days`;
+      document.getElementById("dashPoints").innerText = `${user.points} XP`;
+      document.getElementById("dashLevel").innerText = user.level || "Baccalaureate Aspirant";
+      document.getElementById("dashAvatar").src = user.avatar;
+
+      // Render Notifications
+      const notifs = JSON.parse(localStorage.getItem("taleb_notifications")) || [];
+      const notifContainer = document.getElementById("notificationsList");
+      notifContainer.innerHTML = notifs.map(n => `
+        <div class="bg-slate-900/60 border border-white/5 p-3 rounded-xl flex items-start space-x-3 rtl:space-x-reverse text-sm">
+          <div class="w-2 h-2 rounded-full bg-emerald-500 mt-1.5 flex-shrink-0"></div>
+          <div>
+            <p class="text-slate-300 leading-snug">${n.text}</p>
+            <span class="text-xs text-slate-500 font-mono">${n.date}</span>
+          </div>
+        </div>
+      `).join("");
+    });
+
+    function fillQuickPrompt(text) {
+      document.getElementById("quickPromptInput").value = text;
+    }
+
+    function launchAIChat() {
+      const query = document.getElementById("quickPromptInput").value.trim();
+      if (query) {
+        localStorage.setItem("taleb_pendingAiQuery", query);
+      }
+      window.location.href = "../pages/ai-chat.html";
+    }
+  </script>
+</body>
+</html>

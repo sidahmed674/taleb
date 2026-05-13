@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taleb AI - User Profile</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen relative flex flex-col justify-between">
+  <div class="bg-orb-1"></div>
+  <div class="bg-orb-2"></div>
+
+  <!-- Dynamic Navbar -->
+  <div id="navbar-container"></div>
+
+  <!-- Profile Container -->
+  <main class="flex-grow max-w-4xl mx-auto px-6 py-12 w-full">
+    <div class="glass-card p-8 md:p-12 rounded-3xl border border-white/10 shadow-2xl relative overflow-hidden">
+      <!-- Background Accents -->
+      <div class="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full filter blur-3xl -z-10 pointer-events-none"></div>
+
+      <!-- Avatar & Title -->
+      <div class="flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-8 rtl:space-x-reverse mb-10 pb-10 border-b border-white/10 text-center md:text-left">
+        <img id="profileAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Student" alt="User Avatar" class="w-32 h-32 rounded-3xl bg-slate-900 border-2 border-emerald-500/40 shadow-2xl flex-shrink-0">
+        <div>
+          <h1 id="profileName" class="text-4xl font-extrabold mb-2">Student Name</h1>
+          <p id="profileEmail" class="text-slate-400 font-mono text-sm mb-4">student@taleb.ai</p>
+          <span id="profileLevel" class="bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 font-bold px-4 py-1.5 rounded-full text-xs uppercase tracking-wider">
+            Baccalaureate Aspirant
+          </span>
+        </div>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10 text-center">
+        <div class="bg-slate-900/80 border border-white/5 p-6 rounded-2xl shadow-inner">
+          <div class="text-xs text-slate-500 uppercase tracking-widest font-bold mb-2">Study Streak</div>
+          <div class="text-3xl font-black text-amber-400 flex items-center justify-center space-x-2 rtl:space-x-reverse">
+            <i class="fa-solid fa-fire animate-bounce"></i>
+            <span id="statStreak">12 Days</span>
+          </div>
+        </div>
+
+        <div class="bg-slate-900/80 border border-white/5 p-6 rounded-2xl shadow-inner">
+          <div class="text-xs text-slate-500 uppercase tracking-widest font-bold mb-2">Total Points</div>
+          <div class="text-3xl font-black text-emerald-400 flex items-center justify-center space-x-2 rtl:space-x-reverse">
+            <i class="fa-solid fa-bolt"></i>
+            <span id="statXP">890 XP</span>
+          </div>
+        </div>
+
+        <div class="bg-slate-900/80 border border-white/5 p-6 rounded-2xl shadow-inner">
+          <div class="text-xs text-slate-500 uppercase tracking-widest font-bold mb-2">Account Role</div>
+          <div id="statRole" class="text-2xl font-mono font-bold text-indigo-400 uppercase tracking-wider mt-1">
+            Student
+          </div>
+        </div>
+      </div>
+
+      <!-- Edit Settings Form -->
+      <h3 class="text-2xl font-bold mb-6 flex items-center space-x-2 rtl:space-x-reverse text-emerald-400">
+        <i class="fa-solid fa-gear"></i>
+        <span>Account Settings</span>
+      </h3>
+
+      <div id="saveAlert" class="hidden bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 p-4 rounded-xl mb-6 text-sm text-center font-bold">
+        Profile updated successfully!
+      </div>
+
+      <form onsubmit="updateProfile(event)" class="space-y-6">
+        <div>
+          <label class="block text-sm font-medium text-slate-300 mb-2">Display Name</label>
+          <input type="text" id="editName" required class="w-full bg-slate-900/90 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-slate-300 mb-2">Email Address</label>
+          <input type="email" id="editEmail" required class="w-full bg-slate-900/90 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500">
+        </div>
+
+        <button type="submit" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition transform hover:-translate-y-0.5">
+          Save Changes
+        </button>
+      </form>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="glass border-t border-white/10 py-6 px-6 text-center text-xs text-slate-500 mt-12">
+    <p>© 2026 Taleb AI. Empowering Algerian Education.</p>
+  </footer>
+
+  <script src="../js/app.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      let user = getCurrentUser();
+      if (!user) {
+        const users = JSON.parse(localStorage.getItem("taleb_users"));
+        user = users[1]; // student
+        localStorage.setItem("taleb_currentUser", JSON.stringify(user));
+      }
+
+      document.getElementById("profileAvatar").src = user.avatar;
+      document.getElementById("profileName").innerText = user.name;
+      document.getElementById("profileEmail").innerText = user.email;
+      document.getElementById("profileLevel").innerText = user.level || "Baccalaureate Aspirant";
+      document.getElementById("statStreak").innerText = `${user.streak} Days`;
+      document.getElementById("statXP").innerText = `${user.points} XP`;
+      document.getElementById("statRole").innerText = user.role;
+
+      document.getElementById("editName").value = user.name;
+      document.getElementById("editEmail").value = user.email;
+    });
+
+    function updateProfile(e) {
+      e.preventDefault();
+      const name = document.getElementById("editName").value.trim();
+      const email = document.getElementById("editEmail").value.trim();
+
+      let user = getCurrentUser();
+      if (user) {
+        user.name = name;
+        user.email = email;
+        user.avatar = `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(name)}`;
+        localStorage.setItem("taleb_currentUser", JSON.stringify(user));
+
+        // update in list
+        let users = JSON.parse(localStorage.getItem("taleb_users")) || [];
+        users = users.map(u => u.id === user.id ? user : u);
+        localStorage.setItem("taleb_users", JSON.stringify(users));
+
+        document.getElementById("profileAvatar").src = user.avatar;
+        document.getElementById("profileName").innerText = user.name;
+        document.getElementById("profileEmail").innerText = user.email;
+
+        const alertBox = document.getElementById("saveAlert");
+        alertBox.classList.remove("hidden");
+        setTimeout(() => alertBox.classList.add("hidden"), 3000);
+        renderNavbar();
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taleb AI - AI Assistant</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen relative flex flex-col justify-between">
+  <div class="bg-orb-1"></div>
+  <div class="bg-orb-2"></div>
+
+  <!-- Dynamic Navbar -->
+  <div id="navbar-container"></div>
+
+  <!-- AI Chat Container -->
+  <main class="flex-grow max-w-5xl mx-auto px-6 py-8 w-full flex flex-col">
+    <!-- Chat Header -->
+    <div class="glass-card p-6 rounded-3xl mb-6 border border-emerald-500/30 flex items-center justify-between shadow-xl flex-shrink-0">
+      <div class="flex items-center space-x-4 rtl:space-x-reverse">
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center text-white text-xl font-bold shadow-lg animate-pulse">
+          <i class="fa-solid fa-robot"></i>
+        </div>
+        <div>
+          <h1 class="text-2xl font-extrabold flex items-center space-x-2 rtl:space-x-reverse">
+            <span>Taleb-1 AI Tutor</span>
+            <span class="text-xs bg-emerald-500/20 text-emerald-400 px-2.5 py-0.5 rounded-full border border-emerald-500/30 font-mono">Online</span>
+          </h1>
+          <p class="text-slate-400 text-xs">Specialized in Algerian BEM & BAC Curriculum</p>
+        </div>
+      </div>
+
+      <button onclick="clearChat()" class="text-xs text-slate-400 hover:text-red-400 bg-slate-900/80 px-3 py-2 rounded-xl transition border border-white/5">
+        <i class="fa-solid fa-broom mr-1"></i> Clear Chat
+      </button>
+    </div>
+
+    <!-- Chat Messages Window -->
+    <div id="chatWindow" class="glass-card flex-grow rounded-3xl p-6 mb-6 overflow-y-auto space-y-6 border border-white/10 max-h-[500px] shadow-inner flex flex-col">
+      <!-- Default Greeting -->
+      <div class="flex items-start space-x-3 rtl:space-x-reverse">
+        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">AI</div>
+        <div class="bg-slate-900/80 border border-white/5 p-4 rounded-2xl rounded-tl-none max-w-xl text-sm leading-relaxed text-slate-200">
+          Salam! I am <strong>Taleb-1</strong>, your personal AI tutor. Ask me anything about Mathematics, Physics, Natural Sciences, or Philosophy.
+        </div>
+      </div>
+    </div>
+
+    <!-- Suggested Prompts -->
+    <div class="mb-4 flex flex-wrap gap-2 flex-shrink-0">
+      <span class="text-xs text-slate-500 self-center font-semibold uppercase tracking-wider">Suggested:</span>
+      <button onclick="sendSuggestedPrompt('Explain BAC Math exponential limit theorem')" class="bg-slate-900/80 hover:bg-slate-800 text-slate-300 text-xs px-3 py-2 rounded-xl transition border border-white/5">📐 Math Exp Limits</button>
+      <button onclick="sendSuggestedPrompt('Summarize ATP generation in cellular respiration')" class="bg-slate-900/80 hover:bg-slate-800 text-slate-300 text-xs px-3 py-2 rounded-xl transition border border-white/5">🧬 ATP Generation</button>
+      <button onclick="sendSuggestedPrompt('How to write a philosophy BAC dialectic essay')" class="bg-slate-900/80 hover:bg-slate-800 text-slate-300 text-xs px-3 py-2 rounded-xl transition border border-white/5">📝 Philosophy Essay</button>
+      <button onclick="sendSuggestedPrompt('What is the RLC circuit differential equation?')" class="bg-slate-900/80 hover:bg-slate-800 text-slate-300 text-xs px-3 py-2 rounded-xl transition border border-white/5">⚡ RLC Circuit</button>
+    </div>
+
+    <!-- Chat Input Form -->
+    <form onsubmit="handleSend(event)" class="flex gap-3 flex-shrink-0">
+      <input type="text" id="chatInput" required class="flex-grow bg-slate-900/90 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 shadow-xl" placeholder="Type your academic question here...">
+      <button type="submit" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold px-8 py-4 rounded-2xl shadow-xl hover:shadow-emerald-500/30 transition flex items-center space-x-2 rtl:space-x-reverse">
+        <span>Send</span>
+        <i class="fa-solid fa-paper-plane text-sm"></i>
+      </button>
+    </form>
+  </main>
+
+  <!-- Footer -->
+  <footer class="glass border-t border-white/10 py-6 px-6 text-center text-xs text-slate-500 mt-auto flex-shrink-0">
+    <p>© 2026 Taleb AI. Empowering Algerian Education.</p>
+  </footer>
+
+  <script src="../js/app.js"></script>
+  <script>
+    const KNOWLEDGE_BASE = [
+      { trigger: "exponential", response: "The Exponential function f(x) = e^x has a unique property where f'(x) = f(x). In BAC exam limits, remember that e^x grows faster than any polynomial x^n as x approaches +∞!" },
+      { trigger: "limit", response: "When evaluating indeterminate limit forms like 0/0 or ∞/∞, you can factor the highest degree terms, use standard limit properties, or apply L'Hôpital's rule where applicable." },
+      { trigger: "atp", response: "ATP (Adenosine Triphosphate) is generated during cellular respiration. Glycolysis produces 2 ATP, Krebs cycle 2 ATP, and the respiratory chain generates about 32-34 ATP via oxidative phosphorylation." },
+      { trigger: "philosophy", response: "For a Dialectic Philosophy essay (Thèse, Antithèse, Synthèse): Start with the general problem, present the affirming perspective with philosophers' quotes, challenge it with opposite views, and conclude with a personal balanced synthesis." },
+      { trigger: "rlc", response: "In a series RLC circuit, the differential equation for charge q(t) is: L(d²q/dt²) + R(dq/dt) + (1/C)q = E. If damping R is negligible, undamped oscillations occur at frequency f0 = 1/(2π√LC)." }
+    ];
+
+    const DEFAULT_AI_RESPONSE = "That is an excellent academic inquiry! According to the Algerian curriculum guidelines, analyzing this requires identifying the core definitions and applying step-by-step logical deduction. Be sure to review your official textbook summaries or consult the Taleb AI Library for further revision sheets.";
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const pending = localStorage.getItem("taleb_pendingAiQuery");
+      if (pending) {
+        localStorage.removeItem("taleb_pendingAiQuery");
+        appendUserMessage(pending);
+        simulateAIResponse(pending);
+      }
+    });
+
+    function sendSuggestedPrompt(text) {
+      appendUserMessage(text);
+      simulateAIResponse(text);
+    }
+
+    function handleSend(e) {
+      e.preventDefault();
+      const input = document.getElementById("chatInput");
+      const text = input.value.trim();
+      if (!text) return;
+
+      input.value = "";
+      appendUserMessage(text);
+      simulateAIResponse(text);
+    }
+
+    function appendUserMessage(text) {
+      const win = document.getElementById("chatWindow");
+      const msg = document.createElement("div");
+      msg.className = "flex items-start space-x-3 rtl:space-x-reverse self-end justify-end ml-auto";
+      msg.innerHTML = `
+        <div class="bg-gradient-to-r from-emerald-500 to-teal-600 text-white p-4 rounded-2xl rounded-tr-none max-w-xl text-sm leading-relaxed shadow-lg">
+          ${text}
+        </div>
+        <div class="w-8 h-8 rounded-xl bg-slate-800 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">You</div>
+      `;
+      win.appendChild(msg);
+      win.scrollTop = win.scrollHeight;
+    }
+
+    function simulateAIResponse(query) {
+      const win = document.getElementById("chatWindow");
+      
+      // Typing indicator
+      const typingId = "typing-" + Date.now();
+      const typingDiv = document.createElement("div");
+      typingDiv.id = typingId;
+      typingDiv.className = "flex items-start space-x-3 rtl:space-x-reverse";
+      typingDiv.innerHTML = `
+        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">AI</div>
+        <div class="bg-slate-900/80 border border-white/5 p-4 rounded-2xl rounded-tl-none text-sm text-emerald-400 flex items-center space-x-2 rtl:space-x-reverse">
+          <i class="fa-solid fa-circle-notch animate-spin"></i>
+          <span>Taleb-1 is analyzing curriculum data...</span>
+        </div>
+      `;
+      win.appendChild(typingDiv);
+      win.scrollTop = win.scrollHeight;
+
+      // Find match
+      let answer = DEFAULT_AI_RESPONSE;
+      const lower = query.toLowerCase();
+      for (const item of KNOWLEDGE_BASE) {
+        if (lower.includes(item.trigger)) {
+          answer = item.response;
+          break;
+        }
+      }
+
+      setTimeout(() => {
+        const tEl = document.getElementById(typingId);
+        if (tEl) tEl.remove();
+
+        const msg = document.createElement("div");
+        msg.className = "flex items-start space-x-3 rtl:space-x-reverse";
+        msg.innerHTML = `
+          <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center text-white text-xs font-bold flex-shrink-0 shadow-md">AI</div>
+          <div class="bg-slate-900/80 border border-white/5 p-4 rounded-2xl rounded-tl-none max-w-xl text-sm leading-relaxed text-slate-200 border-l-4 border-l-emerald-500 shadow-xl font-sans">
+            ${answer}
+          </div>
+        `;
+        win.appendChild(msg);
+        win.scrollTop = win.scrollHeight;
+      }, 1200);
+    }
+
+    function clearChat() {
+      const win = document.getElementById("chatWindow");
+      win.innerHTML = `
+        <div class="flex items-start space-x-3 rtl:space-x-reverse">
+          <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">AI</div>
+          <div class="bg-slate-900/80 border border-white/5 p-4 rounded-2xl rounded-tl-none max-w-xl text-sm leading-relaxed text-slate-200">
+            Chat history reset. How can I assist your studies today?
+          </div>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>

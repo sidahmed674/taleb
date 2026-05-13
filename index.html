@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taleb AI - Futuristic Educational Platform</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen relative">
+  <!-- Glowing Orbs -->
+  <div class="bg-orb-1"></div>
+  <div class="bg-orb-2"></div>
+
+  <!-- Dynamic Navbar -->
+  <div id="navbar-container"></div>
+
+  <!-- Hero Section -->
+  <header class="relative pt-20 pb-32 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6 text-center relative z-10">
+      <div class="inline-flex items-center space-x-2 rtl:space-x-reverse glass px-4 py-2 rounded-full text-emerald-400 mb-8 animate-pulse text-sm font-semibold border border-emerald-500/30 shadow-lg shadow-emerald-500/10">
+        <i class="fa-solid fa-graduation-cap"></i>
+        <span>Algérie BEM & BAC 2026 Ready</span>
+      </div>
+
+      <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-8 leading-tight">
+        <span data-i18n="hero_title">The Futuristic AI Platform for Algerian Students</span>
+      </h1>
+
+      <p class="max-w-3xl mx-auto text-lg md:text-xl text-slate-400 mb-12 leading-relaxed" data-i18n="hero_subtitle">
+        Master your BEM & BAC exams with personalized AI tutoring, smart exercises, rich library, and a vibrant community.
+      </p>
+
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="auth/register.html" class="w-full sm:w-auto bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold px-8 py-4 rounded-2xl shadow-xl hover:shadow-emerald-500/30 transition transform hover:-translate-y-1 flex items-center justify-center space-x-2 rtl:space-x-reverse">
+          <span data-i18n="btn_get_started">Get Started Free</span>
+          <i class="fa-solid fa-arrow-right rtl:rotate-180"></i>
+        </a>
+        <a href="pages/ai-chat.html" class="w-full sm:w-auto glass hover:bg-white/10 text-slate-200 font-bold px-8 py-4 rounded-2xl transition flex items-center justify-center space-x-2 rtl:space-x-reverse border border-white/10">
+          <i class="fa-solid fa-microchip text-emerald-400 animate-spin" style="animation-duration: 8s;"></i>
+          <span data-i18n="btn_explore">Explore Features</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Interactive AI Preview Showcase -->
+  <section class="py-16 px-6 max-w-5xl mx-auto">
+    <div class="glass-card rounded-3xl p-8 md:p-12 relative overflow-hidden border border-emerald-500/20 shadow-2xl">
+      <div class="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full filter blur-3xl -z-10"></div>
+      <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+        <div class="max-w-lg">
+          <span class="text-xs uppercase font-extrabold tracking-widest text-emerald-400 mb-2 block">AI Simulation</span>
+          <h2 class="text-3xl font-bold mb-4">Meet Taleb-1, Your 24/7 AI BAC Coach</h2>
+          <p class="text-slate-400 mb-6 leading-relaxed">
+            Stuck on a tricky exponential function or a difficult philosophy essay? Taleb-1 breaks down solutions according to the official Algerian syllabus guidelines.
+          </p>
+          <a href="pages/ai-chat.html" class="inline-flex items-center space-x-2 rtl:space-x-reverse font-bold text-emerald-400 hover:text-emerald-300 transition group">
+            <span>Try Prompting Taleb-1 Now</span>
+            <i class="fa-solid fa-chevron-right group-hover:translate-x-1 transition rtl:rotate-180"></i>
+          </a>
+        </div>
+        <div class="w-full md:w-96 bg-slate-900/90 rounded-2xl p-6 border border-white/10 shadow-inner">
+          <div class="flex items-center space-x-2 rtl:space-x-reverse pb-4 mb-4 border-b border-white/10">
+            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+            <span class="text-xs text-slate-500 ml-2 font-mono">Taleb AI Chat Engine v2.0</span>
+          </div>
+          <div class="space-y-4 font-sans text-sm">
+            <div class="bg-slate-800 p-3 rounded-xl rounded-tl-none max-w-[85%]">
+              <p class="text-slate-300">How do I find the derivative of <code class="text-emerald-400">(2x-1)e^x</code>?</p>
+            </div>
+            <div class="bg-emerald-950/80 border border-emerald-500/30 p-3 rounded-xl rounded-tr-none max-w-[90%] ml-auto text-right">
+              <p class="text-emerald-200">Use the product rule <code class="text-white">(u·v)' = u'v + uv'</code>. Here <code class="text-white">u=2x-1</code> and <code class="text-white">v=e^x</code>. The derivative is <code class="font-bold text-white">(2x+1)e^x</code>!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="py-20 px-6 max-w-7xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-5xl font-extrabold mb-4">Built for Supreme Excellence</h2>
+      <p class="text-slate-400 max-w-2xl mx-auto">Everything you need to conquer academic hurdles and achieve top university admissions.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- Feature 1 -->
+      <div class="glass-card p-8 rounded-3xl hover:border-emerald-500/40 transition group">
+        <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition transform">
+          <i class="fa-solid fa-robot font-bold"></i>
+        </div>
+        <h3 class="text-2xl font-bold mb-3" data-i18n="feat_ai_title">Futuristic AI Tutor</h3>
+        <p class="text-slate-400 leading-relaxed" data-i18n="feat_ai_desc">Instant, tailored explanations aligned with the Algerian educational curriculum.</p>
+      </div>
+
+      <!-- Feature 2 -->
+      <div class="glass-card p-8 rounded-3xl hover:border-emerald-500/40 transition group">
+        <div class="w-14 h-14 rounded-2xl bg-teal-500/10 text-teal-400 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition transform">
+          <i class="fa-solid fa-book-open"></i>
+        </div>
+        <h3 class="text-2xl font-bold mb-3" data-i18n="feat_ex_title">Interactive Exercises</h3>
+        <p class="text-slate-400 leading-relaxed" data-i18n="feat_ex_desc">Hundreds of BAC & BEM exercises with detailed step-by-step solutions.</p>
+      </div>
+
+      <!-- Feature 3 -->
+      <div class="glass-card p-8 rounded-3xl hover:border-emerald-500/40 transition group">
+        <div class="w-14 h-14 rounded-2xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition transform">
+          <i class="fa-solid fa-users"></i>
+        </div>
+        <h3 class="text-2xl font-bold mb-3" data-i18n="feat_comm_title">Active Student Hub</h3>
+        <p class="text-slate-400 leading-relaxed" data-i18n="feat_comm_desc">Connect, discuss, share summaries, and study together with peers nationwide.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Statistics Banner -->
+  <section class="py-16 px-6 bg-gradient-to-r from-emerald-950/50 to-teal-950/50 border-y border-white/10">
+    <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+      <div>
+        <div class="text-4xl md:text-5xl font-black text-emerald-400 mb-2">12,500+</div>
+        <div class="text-slate-400 text-sm uppercase tracking-wider font-semibold">Active Students</div>
+      </div>
+      <div>
+        <div class="text-4xl md:text-5xl font-black text-emerald-400 mb-2">4,800+</div>
+        <div class="text-slate-400 text-sm uppercase tracking-wider font-semibold">BAC Solutions</div>
+      </div>
+      <div>
+        <div class="text-4xl md:text-5xl font-black text-emerald-400 mb-2">99.4%</div>
+        <div class="text-slate-400 text-sm uppercase tracking-wider font-semibold">Success Rate</div>
+      </div>
+      <div>
+        <div class="text-4xl md:text-5xl font-black text-emerald-400 mb-2">24/7</div>
+        <div class="text-slate-400 text-sm uppercase tracking-wider font-semibold">AI Availability</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="glass border-t border-white/10 py-12 px-6 mt-20">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-slate-400 text-sm">
+      <div class="flex items-center space-x-3 rtl:space-x-reverse">
+        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center text-white font-extrabold text-base">T</div>
+        <span class="font-bold text-lg text-slate-200">Taleb AI</span>
+      </div>
+      <p data-i18n="footer_text">© 2026 Taleb AI. Empowering Algerian Education with Artificial Intelligence.</p>
+      <div class="flex space-x-4 rtl:space-x-reverse">
+        <a href="#" class="hover:text-emerald-400"><i class="fa-brands fa-facebook text-lg"></i></a>
+        <a href="#" class="hover:text-emerald-400"><i class="fa-brands fa-instagram text-lg"></i></a>
+        <a href="#" class="hover:text-emerald-400"><i class="fa-brands fa-discord text-lg"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

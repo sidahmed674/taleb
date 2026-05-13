@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taleb AI - Exercises</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen relative flex flex-col justify-between">
+  <div class="bg-orb-1"></div>
+  <div class="bg-orb-2"></div>
+
+  <!-- Dynamic Navbar -->
+  <div id="navbar-container"></div>
+
+  <!-- Main Content Container -->
+  <main class="flex-grow max-w-7xl mx-auto px-6 py-10 w-full">
+    <div class="text-center mb-12">
+      <div class="inline-flex items-center space-x-2 rtl:space-x-reverse glass px-4 py-2 rounded-full text-emerald-400 mb-4 text-xs font-semibold">
+        <i class="fa-solid fa-square-check"></i>
+        <span>Official BEM & BAC Annals</span>
+      </div>
+      <h1 class="text-4xl font-extrabold mb-3" data-i18n="nav_exercises">Interactive Exercises</h1>
+      <p class="text-slate-400 max-w-xl mx-auto text-sm">Practice with real exam questions and unlock step-by-step AI-guided solutions.</p>
+    </div>
+
+    <!-- Filters Bar -->
+    <div class="glass-card p-6 rounded-3xl mb-10 border border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 shadow-xl">
+      <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
+        <button onclick="filterSubject('All')" class="filter-btn bg-emerald-500 text-white font-bold px-4 py-2 rounded-xl text-sm transition">All Subjects</button>
+        <button onclick="filterSubject('Math')" class="filter-btn bg-slate-900 text-slate-300 hover:bg-slate-800 font-bold px-4 py-2 rounded-xl text-sm transition">Mathématiques</button>
+        <button onclick="filterSubject('Physics')" class="filter-btn bg-slate-900 text-slate-300 hover:bg-slate-800 font-bold px-4 py-2 rounded-xl text-sm transition">Physique</button>
+        <button onclick="filterSubject('Science')" class="filter-btn bg-slate-900 text-slate-300 hover:bg-slate-800 font-bold px-4 py-2 rounded-xl text-sm transition">Sciences</button>
+        <button onclick="filterSubject('Philosophy')" class="filter-btn bg-slate-900 text-slate-300 hover:bg-slate-800 font-bold px-4 py-2 rounded-xl text-sm transition">Philosophie</button>
+      </div>
+
+      <select id="diffSelect" onchange="filterDifficulty(this.value)" class="w-full md:w-48 bg-slate-900 border border-white/10 rounded-xl px-4 py-2 text-sm text-slate-300 focus:outline-none focus:border-emerald-500">
+        <option value="All">All Difficulties</option>
+        <option value="Easy">Easy</option>
+        <option value="Medium">Medium</option>
+        <option value="Hard">Hard</option>
+      </select>
+    </div>
+
+    <!-- Exercises Grid -->
+    <div id="exercisesGrid" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <!-- Dynamic rendering -->
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="glass border-t border-white/10 py-6 px-6 text-center text-xs text-slate-500 mt-12">
+    <p>© 2026 Taleb AI. Empowering Algerian Education.</p>
+  </footer>
+
+  <script src="../js/app.js"></script>
+  <script>
+    let currentSubject = "All";
+    let currentDifficulty = "All";
+
+    document.addEventListener("DOMContentLoaded", () => {
+      renderExercises();
+    });
+
+    function filterSubject(sub) {
+      currentSubject = sub;
+      document.querySelectorAll(".filter-btn").forEach(btn => {
+        if (btn.innerText.includes(sub) || (sub === 'All' && btn.innerText.includes('All'))) {
+          btn.className = "filter-btn bg-emerald-500 text-white font-bold px-4 py-2 rounded-xl text-sm transition";
+        } else {
+          btn.className = "filter-btn bg-slate-900 text-slate-300 hover:bg-slate-800 font-bold px-4 py-2 rounded-xl text-sm transition";
+        }
+      });
+      renderExercises();
+    }
+
+    function filterDifficulty(diff) {
+      currentDifficulty = diff;
+      renderExercises();
+    }
+
+    function renderExercises() {
+      const allEx = JSON.parse(localStorage.getItem("taleb_exercises")) || [];
+      const filtered = allEx.filter(e => {
+        const matchSub = currentSubject === "All" || e.subject === currentSubject;
+        const matchDiff = currentDifficulty === "All" || e.difficulty === currentDifficulty;
+        return matchSub && matchDiff;
+      });
+
+      const grid = document.getElementById("exercisesGrid");
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-500">No exercises found matching criteria.</div>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(e => {
+        let diffColor = "bg-green-500/10 text-green-400 border-green-500/20";
+        if (e.difficulty === "Medium") diffColor = "bg-amber-500/10 text-amber-400 border-amber-500/20";
+        if (e.difficulty === "Hard") diffColor = "bg-red-500/10 text-red-400 border-red-500/20";
+
+        return `
+          <div class="glass-card p-8 rounded-3xl border border-white/10 shadow-xl flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span class="text-xs uppercase font-extrabold tracking-wider text-emerald-400 font-mono">${e.subject}</span>
+                <span class="text-xs font-bold px-3 py-1 rounded-full border ${diffColor}">${e.difficulty}</span>
+              </div>
+              <h3 class="text-xl font-bold mb-3 text-slate-100">${e.title}</h3>
+              <p class="text-slate-300 text-sm leading-relaxed mb-6 bg-slate-900/60 p-4 rounded-2xl border border-white/5">${e.content}</p>
+            </div>
+
+            <div>
+              <div id="sol-${e.id}" class="hidden bg-emerald-950/40 border border-emerald-500/30 p-4 rounded-2xl mb-4 text-sm text-emerald-200 whitespace-pre-line font-sans leading-relaxed">
+                <strong class="text-white block mb-2 font-mono text-xs uppercase tracking-wider">Solution Model:</strong>
+                ${e.solution}
+              </div>
+
+              <div class="flex items-center justify-between pt-4 border-t border-white/10">
+                <span class="text-xs text-slate-500">Author: ${e.author}</span>
+                <button onclick="toggleSolution(${e.id})" class="text-xs font-bold text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 px-4 py-2 rounded-xl transition border border-emerald-500/20">
+                  <span id="btnText-${e.id}">Reveal Solution</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function toggleSolution(id) {
+      const sol = document.getElementById(`sol-${id}`);
+      const btn = document.getElementById(`btnText-${id}`);
+      if (sol.classList.contains("hidden")) {
+        sol.classList.remove("hidden");
+        btn.innerText = "Hide Solution";
+      } else {
+        sol.classList.add("hidden");
+        btn.innerText = "Reveal Solution";
+      }
+    }
+  </script>
+</body>
+</html>

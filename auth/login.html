@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taleb AI - Login</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen relative flex flex-col justify-between">
+  <div class="bg-orb-1"></div>
+  <div class="bg-orb-2"></div>
+
+  <!-- Dynamic Navbar -->
+  <div id="navbar-container"></div>
+
+  <!-- Login Form Container -->
+  <main class="flex-grow flex items-center justify-center px-6 py-12">
+    <div class="glass-card w-full max-w-md p-8 md:p-10 rounded-3xl border border-white/10 shadow-2xl relative">
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-extrabold mb-2" data-i18n="nav_login">Login</h1>
+        <p class="text-slate-400 text-sm">Welcome back to your AI study companion</p>
+      </div>
+
+      <!-- Demo Admin Notice -->
+      <div class="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-4 mb-6 text-sm text-slate-300">
+        <div class="flex items-center space-x-2 font-semibold text-emerald-400 mb-1">
+          <i class="fa-solid fa-circle-info"></i>
+          <span>Super Admin Access Demo:</span>
+        </div>
+        <p class="font-mono text-xs text-slate-300">Email: sidahmedag99@gmail.com</p>
+        <p class="font-mono text-xs text-slate-300">Pass: password123</p>
+      </div>
+
+      <div id="errorMessage" class="hidden bg-red-500/10 border border-red-500/30 text-red-400 p-3 rounded-xl mb-6 text-sm text-center">
+        Invalid email or password.
+      </div>
+
+      <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-6">
+        <div>
+          <label class="block text-sm font-medium text-slate-300 mb-2">Email Address</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-500">
+              <i class="fa-solid fa-envelope"></i>
+            </span>
+            <input type="email" id="loginEmail" required class="w-full bg-slate-900/80 border border-white/10 rounded-xl py-3 pl-11 pr-4 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition" placeholder="name@example.com">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-slate-300 mb-2">Password</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-500">
+              <i class="fa-solid fa-lock"></i>
+            </span>
+            <input type="password" id="loginPass" required class="w-full bg-slate-900/80 border border-white/10 rounded-xl py-3 pl-11 pr-4 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition" placeholder="••••••••">
+          </div>
+        </div>
+
+        <button type="submit" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold py-3.5 rounded-xl shadow-lg hover:shadow-emerald-500/30 transition transform hover:-translate-y-0.5">
+          Sign In
+        </button>
+      </form>
+
+      <div class="mt-8 text-center text-sm text-slate-400">
+        Don't have an account? 
+        <a href="register.html" class="text-emerald-400 hover:text-emerald-300 font-semibold underline ml-1">Create Account</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="glass border-t border-white/10 py-6 px-6 text-center text-xs text-slate-500">
+    <p>© 2026 Taleb AI. Empowering Algerian Education.</p>
+  </footer>
+
+  <script src="../js/app.js"></script>
+  <script>
+    function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById("loginEmail").value.trim();
+      const pass = document.getElementById("loginPass").value.trim();
+      
+      const success = loginUser(email, pass);
+      if (success) {
+        // Check role and redirect
+        const currentUser = JSON.parse(localStorage.getItem("taleb_currentUser"));
+        if (currentUser.email === SUPER_ADMIN_EMAIL) {
+          window.location.href = "../admin/dashboard.html";
+        } else {
+          window.location.href = "../dashboard/index.html";
+        }
+      } else {
+        document.getElementById("errorMessage").classList.remove("hidden");
+      }
+    }
+  </script>
+</body>
+</html>

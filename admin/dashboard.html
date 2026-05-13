@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taleb AI - Super Admin Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen relative flex flex-col justify-between">
+  <div class="bg-orb-1"></div>
+  <div class="bg-orb-2"></div>
+
+  <!-- Dynamic Navbar -->
+  <div id="navbar-container"></div>
+
+  <!-- Admin Content Container -->
+  <main class="flex-grow max-w-7xl mx-auto px-6 py-10 w-full">
+    <!-- Non-Admin Warning Banner -->
+    <div id="adminWarning" class="hidden bg-red-500/10 border border-red-500/30 text-red-400 p-6 rounded-3xl mb-8 text-center glass-card shadow-2xl">
+      <i class="fa-solid fa-shield-halved text-4xl mb-4"></i>
+      <h2 class="text-2xl font-bold mb-2">Super Admin Privileges Required</h2>
+      <p class="text-slate-300 max-w-xl mx-auto mb-6 text-sm">
+        Only <strong class="text-white font-mono">sidahmedag99@gmail.com</strong> has authorization to manage platform content.
+      </p>
+      <button onclick="switchAdminDemo()" class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold px-6 py-3 rounded-xl shadow-lg hover:shadow-purple-500/30 transition">
+        Switch to Admin Demo Account Instantly
+      </button>
+    </div>
+
+    <div id="adminContent" class="space-y-8">
+      <!-- Admin Header -->
+      <div class="glass-card p-8 rounded-3xl border border-purple-500/30 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="flex items-center space-x-4 rtl:space-x-reverse">
+          <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-purple-600 to-indigo-600 flex items-center justify-center text-white text-3xl font-black shadow-lg">
+            <i class="fa-solid fa-crown text-amber-400"></i>
+          </div>
+          <div>
+            <h1 class="text-3xl font-extrabold mb-1">Super Admin Portal</h1>
+            <p class="text-slate-400 text-sm font-mono">sidahmedag99@gmail.com</p>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-3">
+          <button onclick="openModal('exerciseModal')" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold px-5 py-2.5 rounded-xl shadow transition flex items-center space-x-2 rtl:space-x-reverse">
+            <i class="fa-solid fa-plus text-sm"></i>
+            <span>Add Exercise</span>
+          </button>
+          <button onclick="openModal('lessonModal')" class="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold px-5 py-2.5 rounded-xl shadow transition flex items-center space-x-2 rtl:space-x-reverse">
+            <i class="fa-solid fa-book-bookmark text-sm"></i>
+            <span>Add Lesson PDF</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Management Grids -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Exercises Table -->
+        <div class="glass-card p-6 rounded-3xl border border-white/10 shadow-xl">
+          <h2 class="text-xl font-bold mb-4 flex items-center space-x-2 rtl:space-x-reverse text-emerald-400">
+            <i class="fa-solid fa-book-open"></i>
+            <span>Manage Exercises</span>
+          </h2>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead class="text-xs uppercase bg-slate-900/80 text-slate-400">
+                <tr>
+                  <th class="p-3 rounded-l-xl">Subject</th>
+                  <th class="p-3">Title</th>
+                  <th class="p-3 text-right rounded-r-xl">Action</th>
+                </tr>
+              </thead>
+              <tbody id="adminExercisesTable" class="divide-y divide-white/5">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Lessons / Library Table -->
+        <div class="glass-card p-6 rounded-3xl border border-white/10 shadow-xl">
+          <h2 class="text-xl font-bold mb-4 flex items-center space-x-2 rtl:space-x-reverse text-blue-400">
+            <i class="fa-solid fa-file-pdf"></i>
+            <span>Manage Library Lessons</span>
+          </h2>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead class="text-xs uppercase bg-slate-900/80 text-slate-400">
+                <tr>
+                  <th class="p-3 rounded-l-xl">Category</th>
+                  <th class="p-3">Title</th>
+                  <th class="p-3 text-right rounded-r-xl">Action</th>
+                </tr>
+              </thead>
+              <tbody id="adminLessonsTable" class="divide-y divide-white/5">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Community Posts Table -->
+        <div class="glass-card p-6 rounded-3xl border border-white/10 shadow-xl">
+          <h2 class="text-xl font-bold mb-4 flex items-center space-x-2 rtl:space-x-reverse text-amber-400">
+            <i class="fa-solid fa-comments"></i>
+            <span>Moderate Community Posts</span>
+          </h2>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead class="text-xs uppercase bg-slate-900/80 text-slate-400">
+                <tr>
+                  <th class="p-3 rounded-l-xl">Author</th>
+                  <th class="p-3">Snippet</th>
+                  <th class="p-3 text-right rounded-r-xl">Action</th>
+                </tr>
+              </thead>
+              <tbody id="adminPostsTable" class="divide-y divide-white/5">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Registered Users Table -->
+        <div class="glass-card p-6 rounded-3xl border border-white/10 shadow-xl">
+          <h2 class="text-xl font-bold mb-4 flex items-center space-x-2 rtl:space-x-reverse text-purple-400">
+            <i class="fa-solid fa-users-gear"></i>
+            <span>User Management</span>
+          </h2>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead class="text-xs uppercase bg-slate-900/80 text-slate-400">
+                <tr>
+                  <th class="p-3 rounded-l-xl">User</th>
+                  <th class="p-3">Role</th>
+                  <th class="p-3 text-right rounded-r-xl">Action</th>
+                </tr>
+              </thead>
+              <tbody id="adminUsersTable" class="divide-y divide-white/5">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Add Exercise Modal -->
+  <div id="exerciseModal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-6">
+    <div class="glass-card w-full max-w-lg p-8 rounded-3xl border border-white/10 shadow-2xl relative">
+      <button onclick="closeModal('exerciseModal')" class="absolute top-6 right-6 text-slate-400 hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
+      <h3 class="text-2xl font-bold mb-6">Add New BAC Exercise</h3>
+      <form onsubmit="addExercise(event)" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-slate-300 mb-1">Subject</label>
+          <select id="exSubject" class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-white">
+            <option value="Math">Mathématiques</option>
+            <option value="Physics">Physique-Chimie</option>
+            <option value="Science">Sciences SNV</option>
+            <option value="Philosophy">Philosophie</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-slate-300 mb-1">Title</label>
+          <input type="text" id="exTitle" required class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-white placeholder-slate-500" placeholder="e.g. BAC 2024 Math Ex 2">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-slate-300 mb-1">Difficulty</label>
+          <select id="exDiff" class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-white">
+            <option value="Easy">Easy</option>
+            <option value="Medium">Medium</option>
+            <option value="Hard">Hard</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-slate-300 mb-1">Question Content</label>
+          <textarea id="exContent" rows="3" required class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-white placeholder-slate-500" placeholder="State the question..."></textarea>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-slate-300 mb-1">Detailed Solution</label>
+          <textarea id="exSolution" rows="3" required class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-white placeholder-slate-500" placeholder="Step-by-step solution..."></textarea>
+        </div>
+        <button type="submit" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold py-3 rounded-xl shadow-lg transition">
+          Publish Exercise
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add Lesson Modal -->
+  <div id="lessonModal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-6">
+    <div class="glass-card w-full max-w-lg p-8 rounded-3xl border border-white/10 shadow-2xl relative">
+      <button onclick="closeModal('lessonModal')" class="absolute top-6 right-6 text-slate-400 hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
+      <h3 class="text-2xl font-bold mb-6">Add New Lesson PDF</h3>
+      <form onsubmit="addLesson(event)" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-slate-300 mb-1">Category</label>
+          <select id="lesCat" class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-white">
+            <option value="Math">Mathématiques</option>
+            <option value="Physics">Physique-Chimie</option>
+            <option value="Science">Sciences SNV</option>
+            <option value="Philosophy">Philosophie</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-slate-300 mb-1">Title</label>
+          <input type="text" id="lesTitle" required class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-white placeholder-slate-500" placeholder="e.g. Fiches de Révision Géométrie">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-slate-300 mb-1">File Size</label>
+          <input type="text" id="lesSize" required class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-white placeholder-slate-500" placeholder="e.g. 5.2 MB">
+        </div>
+        <button type="submit" class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold py-3 rounded-xl shadow-lg transition">
+          Publish Lesson
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="glass border-t border-white/10 py-6 px-6 text-center text-xs text-slate-500 mt-12">
+    <p>© 2026 Taleb AI. Empowering Algerian Education.</p>
+  </footer>
+
+  <script src="../js/app.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const user = getCurrentUser();
+      if (!user || user.email !== SUPER_ADMIN_EMAIL) {
+        document.getElementById("adminWarning").classList.remove("hidden");
+        document.getElementById("adminContent").classList.add("hidden");
+      } else {
+        renderAdminTables();
+      }
+    });
+
+    function switchAdminDemo() {
+      const users = JSON.parse(localStorage.getItem("taleb_users"));
+      const admin = users.find(u => u.email === SUPER_ADMIN_EMAIL);
+      localStorage.setItem("taleb_currentUser", JSON.stringify(admin));
+      window.location.reload();
+    }
+
+    function renderAdminTables() {
+      // Exercises
+      const exercises = JSON.parse(localStorage.getItem("taleb_exercises")) || [];
+      document.getElementById("adminExercisesTable").innerHTML = exercises.map(e => `
+        <tr class="hover:bg-slate-900/40">
+          <td class="p-3 font-semibold text-emerald-400">${e.subject}</td>
+          <td class="p-3 text-slate-200">${e.title}</td>
+          <td class="p-3 text-right">
+            <button onclick="deleteExercise(${e.id})" class="text-red-400 hover:text-red-300 p-1"><i class="fa-solid fa-trash-can"></i></button>
+          </td>
+        </tr>
+      `).join("");
+
+      // Lessons
+      const lessons = JSON.parse(localStorage.getItem("taleb_library")) || [];
+      document.getElementById("adminLessonsTable").innerHTML = lessons.map(l => `
+        <tr class="hover:bg-slate-900/40">
+          <td class="p-3 font-semibold text-blue-400">${l.category}</td>
+          <td class="p-3 text-slate-200">${l.title}</td>
+          <td class="p-3 text-right">
+            <button onclick="deleteLesson(${l.id})" class="text-red-400 hover:text-red-300 p-1"><i class="fa-solid fa-trash-can"></i></button>
+          </td>
+        </tr>
+      `).join("");
+
+      // Posts
+      const posts = JSON.parse(localStorage.getItem("taleb_posts")) || [];
+      document.getElementById("adminPostsTable").innerHTML = posts.map(p => `
+        <tr class="hover:bg-slate-900/40">
+          <td class="p-3 font-semibold text-amber-400">${p.authorName}</td>
+          <td class="p-3 text-slate-300 line-clamp-1 max-w-xs">${p.content}</td>
+          <td class="p-3 text-right">
+            <button onclick="deletePost(${p.id})" class="text-red-400 hover:text-red-300 p-1"><i class="fa-solid fa-trash-can"></i></button>
+          </td>
+        </tr>
+      `).join("");
+
+      // Users
+      const users = JSON.parse(localStorage.getItem("taleb_users")) || [];
+      document.getElementById("adminUsersTable").innerHTML = users.map(u => `
+        <tr class="hover:bg-slate-900/40">
+          <td class="p-3 flex items-center space-x-2 rtl:space-x-reverse">
+            <img src="${u.avatar}" class="w-6 h-6 rounded-full bg-slate-800">
+            <span class="text-slate-200">${u.name}</span>
+          </td>
+          <td class="p-3 font-mono text-xs ${u.role === 'admin' ? 'text-purple-400 font-bold' : 'text-slate-400'}">${u.role}</td>
+          <td class="p-3 text-right">
+            ${u.email !== SUPER_ADMIN_EMAIL ? `<button onclick="deleteUser(${u.id})" class="text-red-400 hover:text-red-300 p-1"><i class="fa-solid fa-user-xmark"></i></button>` : '<span class="text-xs text-slate-600">Protected</span>'}
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    function openModal(id) { document.getElementById(id).classList.remove("hidden"); }
+    function closeModal(id) { document.getElementById(id).classList.add("hidden"); }
+
+    function addExercise(e) {
+      e.preventDefault();
+      const exercises = JSON.parse(localStorage.getItem("taleb_exercises")) || [];
+      const newEx = {
+        id: Date.now(),
+        subject: document.getElementById("exSubject").value,
+        title: document.getElementById("exTitle").value,
+        difficulty: document.getElementById("exDiff").value,
+        content: document.getElementById("exContent").value,
+        solution: document.getElementById("exSolution").value,
+        author: "Super Admin"
+      };
+      exercises.unshift(newEx);
+      localStorage.setItem("taleb_exercises", JSON.stringify(exercises));
+      closeModal('exerciseModal');
+      renderAdminTables();
+    }
+
+    function addLesson(e) {
+      e.preventDefault();
+      const lessons = JSON.parse(localStorage.getItem("taleb_library")) || [];
+      const newLes = {
+        id: Date.now(),
+        category: document.getElementById("lesCat").value,
+        title: document.getElementById("lesTitle").value,
+        size: document.getElementById("lesSize").value,
+        downloads: 0,
+        format: "PDF",
+        link: "#"
+      };
+      lessons.unshift(newLes);
+      localStorage.setItem("taleb_library", JSON.stringify(lessons));
+      closeModal('lessonModal');
+      renderAdminTables();
+    }
+
+    function deleteExercise(id) {
+      let exercises = JSON.parse(localStorage.getItem("taleb_exercises")) || [];
+      exercises = exercises.filter(e => e.id !== id);
+      localStorage.setItem("taleb_exercises", JSON.stringify(exercises));
+      renderAdminTables();
+    }
+
+    function deleteLesson(id) {
+      let lessons = JSON.parse(localStorage.getItem("taleb_library")) || [];
+      lessons = lessons.filter(l => l.id !== id);
+      localStorage.setItem("taleb_library", JSON.stringify(lessons));
+      renderAdminTables();
+    }
+
+    function deletePost(id) {
+      let posts = JSON.parse(localStorage.getItem("taleb_posts")) || [];
+      posts = posts.filter(p => p.id !== id);
+      localStorage.setItem("taleb_posts", JSON.stringify(posts));
+      renderAdminTables();
+    }
+
+    function deleteUser(id) {
+      let users = JSON.parse(localStorage.getItem("taleb_users")) || [];
+      users = users.filter(u => u.id !== id);
+      localStorage.setItem("taleb_users", JSON.stringify(users));
+      renderAdminTables();
+    }
+  </script>
+</body>
+</html>

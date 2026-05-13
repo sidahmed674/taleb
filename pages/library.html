@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taleb AI - Library & PDFs</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen relative flex flex-col justify-between">
+  <div class="bg-orb-1"></div>
+  <div class="bg-orb-2"></div>
+
+  <!-- Dynamic Navbar -->
+  <div id="navbar-container"></div>
+
+  <!-- Main Content Container -->
+  <main class="flex-grow max-w-7xl mx-auto px-6 py-10 w-full">
+    <div class="text-center mb-12">
+      <div class="inline-flex items-center space-x-2 rtl:space-x-reverse glass px-4 py-2 rounded-full text-blue-400 mb-4 text-xs font-semibold">
+        <i class="fa-solid fa-file-pdf"></i>
+        <span>Official Curriculum Summaries</span>
+      </div>
+      <h1 class="text-4xl font-extrabold mb-3" data-i18n="nav_library">Educational Library</h1>
+      <p class="text-slate-400 max-w-xl mx-auto text-sm">Download high-quality revision sheets, BAC annals, and official textbook summaries.</p>
+    </div>
+
+    <!-- Library Grid -->
+    <div id="libraryGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Dynamic rendering -->
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="glass border-t border-white/10 py-6 px-6 text-center text-xs text-slate-500 mt-12">
+    <p>© 2026 Taleb AI. Empowering Algerian Education.</p>
+  </footer>
+
+  <script src="../js/app.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      renderLibrary();
+    });
+
+    function renderLibrary() {
+      const items = JSON.parse(localStorage.getItem("taleb_library")) || [];
+      const grid = document.getElementById("libraryGrid");
+      
+      grid.innerHTML = items.map(item => `
+        <div class="glass-card p-6 rounded-3xl border border-white/10 shadow-xl flex flex-col justify-between hover:border-blue-500/40 transition group">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center font-bold text-lg group-hover:scale-110 transition transform">
+                <i class="fa-solid fa-file-lines"></i>
+              </div>
+              <span class="text-xs uppercase font-extrabold tracking-wider text-slate-400 bg-slate-900/80 px-3 py-1 rounded-full border border-white/5">${item.category}</span>
+            </div>
+            <h3 class="text-xl font-bold mb-2 text-slate-100 group-hover:text-blue-400 transition">${item.title}</h3>
+            <div class="flex items-center space-x-4 rtl:space-x-reverse text-xs text-slate-400 mb-6 font-mono">
+              <span>Size: ${item.size}</span>
+              <span>•</span>
+              <span>Downloads: ${item.downloads}</span>
+            </div>
+          </div>
+
+          <button onclick="downloadPdf(${item.id})" class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold py-3 rounded-xl shadow-lg transition flex items-center justify-center space-x-2 rtl:space-x-reverse">
+            <i class="fa-solid fa-cloud-arrow-down"></i>
+            <span>Download PDF</span>
+          </button>
+        </div>
+      `).join("");
+    }
+
+    function downloadPdf(id) {
+      let items = JSON.parse(localStorage.getItem("taleb_library")) || [];
+      const item = items.find(i => i.id === id);
+      if (item) {
+        item.downloads++;
+        localStorage.setItem("taleb_library", JSON.stringify(items));
+        renderLibrary();
+        alert(`Downloading: ${item.title}\nFormat: PDF\nSize: ${item.size}`);
+      }
+    }
+  </script>
+</body>
+</html>
